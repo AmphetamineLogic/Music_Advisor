@@ -54,7 +54,6 @@ class Server {
             httpExchange.sendResponseHeaders(200, hello.length());
             httpExchange.getResponseBody().write(hello.getBytes());
             accessCode = httpExchange.getRequestURI().getQuery().split("code=")[1];
-            System.out.println(accessCode);
             try {
                 new Client().post(accessCode);
             } catch (Exception e) {
