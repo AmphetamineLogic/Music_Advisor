@@ -25,7 +25,8 @@ class Client {
     }
 
     void requestAccessToken(String code) throws Exception {
-        apiPath = "https://accounts.spotify.com/api/token";
+        //apiPath = "https://accounts.spotify.com/api/token";
+        apiPath = Main.resource + "/token";
         client_id = "941ca8e7d13d404f97789c3416d47e5f";
         client_secret = "cd5b07f02d6c435981a5936e1cb5f15e";
         String body = "grant_type=authorization_code"
@@ -33,7 +34,6 @@ class Client {
                 + "&redirect_uri=http%3A%2F%2Flocalhost:8765"
                 + "&client_id=" + client_id
                 + "&client_secret=" + client_secret;
-
 
         HttpRequest request = HttpRequest.newBuilder()
                 .header("Content-Type", "application/x-www-form-urlencoded")
@@ -43,7 +43,6 @@ class Client {
 
         httpResponse = client.send(request, BodyHandlers.ofString());
         System.out.println("Success!");
-//        System.out.println(response.body());
         authenticator.setAuthorized(true);
         setAccessToken(httpResponse.body().toString());
     }
@@ -51,12 +50,26 @@ class Client {
     void setAccessToken (String response) {
         JsonObject jsonObject = JsonParser.parseString(response).getAsJsonObject();
         String accessToken = jsonObject.get("access_token").getAsString();
-        System.out.println(accessToken);
         authenticator.setAccessToken(accessToken);
     }
 
-    String requestNew () {
-        apiPath = "https://api.spotify.com/v1/browse/new-releases";
+    String request(String...action) {
+        switch (action[0]) {
+            case "new":
+                apiPath = "https://api.spotify.com/v1/browse/new-releases";
+                break;
+            case "featured":
+                apiPath = "https://api.spotify.com/v1/browse/featured-playlists";
+                break;
+            case "categories":
+                apiPath = "https://api.spotify.com/v1/browse/categories";
+                break;
+            case "playlists":
+                apiPath = "https://api.spotify.com/v1/browse/categories/" + action[1] +"/playlists";
+            default:
+                break;
+        }
+
         httpRequest = HttpRequest.newBuilder()
                 .header("Authorization", "Bearer " + Authenticator.getInstance().getAccessToken())
                 .uri(URI.create(apiPath))
@@ -69,7 +82,6 @@ class Client {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        System.out.println(httpResponse.body());
         return httpResponse.body().toString();
     }
 }

@@ -5,7 +5,24 @@ import java.util.Scanner;
 import static java.lang.System.exit;
 
 public class Main {
+    static String access;
+    static String resource;
+
     public static void main(String[] args) {
+        access = "https://accounts.spotify.com";
+        resource = "https://accounts.spotify.com/api";
+
+        if (args.length > 0) {
+            for (int i = 0; i < args.length; i++) {
+                if ("-access".equals(args[i])) {
+                    access = args[i+1];
+                }
+                if ("-resource".equals(args[i])) {
+                    resource = args[i+1];
+                }
+            }
+        }
+
         Scanner scanner = new Scanner(System.in);
         String input;
         Authenticator authenticator = Authenticator.getInstance();
@@ -15,28 +32,16 @@ public class Main {
                 if (authenticator.isAuthorized()) {
                     switch (input) {
                         case "new":
-                            PrintData.printNewAlbums(new Client().requestNew());
+                            PrintData.printNewAlbums(new Client().request("new"));
                             break;
                         case "featured":
-                            System.out.println("---FEATURED---\n" +
-                                    "Mellow Morning\n" +
-                                    "Wake Up and Smell the Coffee\n" +
-                                    "Monday Motivation\n" +
-                                    "Songs to Sing in the Shower");
+                            PrintData.printPlaylists(new Client().request("featured"));
                             break;
                         case "categories":
-                            System.out.println("---CATEGORIES---\n" +
-                                    "Top Lists\n" +
-                                    "Pop\n" +
-                                    "Mood\n" +
-                                    "Latin");
+                            PrintData.printCategories(new Client().request("categories"));
                             break;
                         case "playlists":
-                            System.out.println("--" + scanner.next().toUpperCase() + " PLAYLISTS---\n" +
-                                    "Walk Like A Badass  \n" +
-                                    "Rage Beats  \n" +
-                                    "Arab Mood Booster  \n" +
-                                    "Sunday Stroll");
+                            PrintData.printPlaylists(new Client().request("playlists", scanner.next()));
                             break;
                         case "exit":
                             System.out.println("---GOODBYE!---");

@@ -1,15 +1,11 @@
 package advisor;
 
-import java.util.Arrays;
-
-public class Album {
+class Playlist {
     String name;
-    Artist[] artists;
     String href;
 
-    public Album (String name, Artist[] artists, String href) {
+    public Playlist (String name, String href) {
         this.name = name;
-        this.artists = artists.clone();
         this.href = href;
     }
 
@@ -17,8 +13,6 @@ public class Album {
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(name);
-        stringBuilder.append("\n");
-        stringBuilder.append(Arrays.toString(artists));
         stringBuilder.append("\n");
         stringBuilder.append(href);
         stringBuilder.append("\n");
