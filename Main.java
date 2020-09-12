@@ -1,5 +1,6 @@
 package advisor;
 
+import java.awt.geom.RectangularShape;
 import java.util.Scanner;
 
 import static java.lang.System.exit;

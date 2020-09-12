@@ -44,7 +44,10 @@ class Client {
         httpResponse = client.send(request, BodyHandlers.ofString());
         System.out.println("Success!");
         authenticator.setAuthorized(true);
+
         setAccessToken(httpResponse.body().toString());
+        Server httpServer = Server.getInstance();
+        httpServer.shutdown();
     }
 
     void setAccessToken (String response) {
